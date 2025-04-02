@@ -26,5 +26,7 @@ public class Spreadsheet {
 
     private LocalDateTime date;
 
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @JoinColumn(name = "spreadsheet_id")
     private List<Workout> workouts;
 }
