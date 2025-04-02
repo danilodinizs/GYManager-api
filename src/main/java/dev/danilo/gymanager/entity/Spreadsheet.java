@@ -1,12 +1,18 @@
 package dev.danilo.gymanager.entity;
 
 import jakarta.persistence.*;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Entity
-@Table(name = "worksheet")
+@Table(name = "Spreadsheet")
 public class Spreadsheet {
 
     @Id
