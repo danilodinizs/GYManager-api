@@ -8,6 +8,8 @@ import dev.danilo.gymanager.repository.SpreadsheetRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class SpreadsheetService {
@@ -27,5 +29,11 @@ public class SpreadsheetService {
 
     public void save(SpreadsheetRequestDTO dto) {
         repository.save(mapper.toEntity(dto));
+    }
+
+    public SpreadsheetResponseDTO findById(UUID id) {
+        Optional<Spreadsheet> spreadsheet = repository.findById(id);
+        return spreadsheet.map(mapper::toDto).orElse(null);
+
     }
 }
