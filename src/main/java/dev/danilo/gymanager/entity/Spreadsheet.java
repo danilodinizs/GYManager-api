@@ -24,6 +24,7 @@ public class Spreadsheet {
 
     private String description;
 
+    @Column(name = "created_at")
     private LocalDateTime date;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
