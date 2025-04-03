@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/spreadsheet")
@@ -38,5 +39,10 @@ public class SpreadsheetController {
         System.out.println("Dados recebidos: " + dto.name() + ", " + dto.description() + ", " + dto.date());
         service.save(dto);
         return ResponseEntity.status(HttpStatus.CREATED).build();
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<SpreadsheetResponseDTO> findSpreadsheetById(@PathVariable UUID id) {
+        return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
     }
 }
