@@ -1,5 +1,6 @@
 package dev.danilo.gymanager.service;
 
+import dev.danilo.gymanager.dto.SpreadsheetRequestDTO;
 import dev.danilo.gymanager.dto.SpreadsheetResponseDTO;
 import dev.danilo.gymanager.entity.Spreadsheet;
 import dev.danilo.gymanager.mapper.SpreadsheetMapper;
@@ -22,5 +23,9 @@ public class SpreadsheetService {
 
     public List<SpreadsheetResponseDTO> findAll() {
         return mapper.toDtoList(repository.findAll());
+    }
+
+    public void save(SpreadsheetRequestDTO dto) {
+        repository.save(mapper.toEntity(dto));
     }
 }
