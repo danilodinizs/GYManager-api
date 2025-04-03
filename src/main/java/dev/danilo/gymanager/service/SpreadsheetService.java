@@ -34,6 +34,10 @@ public class SpreadsheetService {
     public SpreadsheetResponseDTO findById(UUID id) {
         Optional<Spreadsheet> spreadsheet = repository.findById(id);
         return spreadsheet.map(mapper::toDto).orElse(null);
+    }
 
+    public void delete(UUID id) {
+        Optional<Spreadsheet> spreadsheet = repository.findById(id);
+        spreadsheet.ifPresent(repository::delete);
     }
 }
