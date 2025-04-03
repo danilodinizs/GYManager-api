@@ -45,4 +45,10 @@ public class SpreadsheetController {
     public ResponseEntity<SpreadsheetResponseDTO> findSpreadsheetById(@PathVariable UUID id) {
         return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> findByIdAndDelete(@PathVariable UUID id) {
+        service.delete(id);
+        return ResponseEntity.status(HttpStatus.OK).build();
+    }
 }
