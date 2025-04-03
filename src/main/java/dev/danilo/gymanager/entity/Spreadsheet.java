@@ -3,12 +3,15 @@ package dev.danilo.gymanager.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.UUID;
 
 @Data
 @Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "spreadsheet")
 public class Spreadsheet {
@@ -23,7 +26,7 @@ public class Spreadsheet {
     private String description;
 
     @Column(name = "created_at")
-    private LocalDateTime date;
+    private LocalDate date;
 
     @OneToMany(mappedBy = "spreadsheet")
     private List<Workout> workouts;
