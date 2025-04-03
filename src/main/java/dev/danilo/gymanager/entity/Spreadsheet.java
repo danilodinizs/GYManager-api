@@ -7,13 +7,10 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Data
 @Builder
 @Entity
-@Table(name = "Spreadsheet")
+@Table(name = "spreadsheet")
 public class Spreadsheet {
 
     @Id
@@ -28,7 +25,6 @@ public class Spreadsheet {
     @Column(name = "created_at")
     private LocalDateTime date;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "spreadsheet_id")
+    @OneToMany(mappedBy = "spreadsheet")
     private List<Workout> workouts;
 }
