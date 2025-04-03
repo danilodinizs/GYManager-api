@@ -49,6 +49,6 @@ public class SpreadsheetController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<Void> findByIdAndDelete(@PathVariable UUID id) {
         service.delete(id);
-        return ResponseEntity.status(HttpStatus.OK).build();
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 }
