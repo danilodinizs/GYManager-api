@@ -8,12 +8,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Builder
 public record SpreadsheetRequestDTO(String name,
                                     String description,
                                     @JsonFormat(pattern = "dd/MM/yyyy")
                                     LocalDate date) {
-
-    public SpreadsheetRequestDTO {
-    }
 }

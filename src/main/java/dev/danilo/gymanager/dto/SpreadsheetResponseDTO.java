@@ -8,14 +8,10 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-@Builder
 public record SpreadsheetResponseDTO(UUID id,
                                      String name,
                                      String description,
                                      @JsonFormat(pattern = "dd/MM/yyyy")
                                      LocalDate date,
-                                     List<Workout> workouts) {
-
-    public SpreadsheetResponseDTO {
-    }
+                                     List<WorkoutResponseDTO> workouts) {
 }
