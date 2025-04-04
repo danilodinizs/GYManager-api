@@ -24,6 +24,8 @@ public class Workout {
     private String name;
 
     private String description;
+
+    @Enumerated(EnumType.STRING)
     private DayOfWeek dayOfWeek;
 
     @ManyToOne
