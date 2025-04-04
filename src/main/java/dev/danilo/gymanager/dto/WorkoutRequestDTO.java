@@ -13,8 +13,7 @@ import java.util.UUID;
 public record WorkoutRequestDTO(UUID spreadsheetId,
                                 String name,
                                 String description,
-                                DayOfWeek dayOfWeek,
-                                List<Workout> workouts) {
+                                DayOfWeek dayOfWeek) {
 
     public WorkoutRequestDTO {
     }

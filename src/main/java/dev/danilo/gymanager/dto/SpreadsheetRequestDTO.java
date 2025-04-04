@@ -12,8 +12,7 @@ import java.util.UUID;
 public record SpreadsheetRequestDTO(String name,
                                     String description,
                                     @JsonFormat(pattern = "dd/MM/yyyy")
-                                    LocalDate date,
-                                    List<Workout> workouts) {
+                                    LocalDate date) {
 
     public SpreadsheetRequestDTO {
     }
