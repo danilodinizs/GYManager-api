@@ -2,7 +2,6 @@ package dev.danilo.gymanager.controller;
 
 import dev.danilo.gymanager.dto.SpreadsheetRequestDTO;
 import dev.danilo.gymanager.dto.SpreadsheetResponseDTO;
-import dev.danilo.gymanager.entity.Spreadsheet;
 import dev.danilo.gymanager.mapper.SpreadsheetMapper;
 import dev.danilo.gymanager.service.SpreadsheetService;
 import jakarta.validation.Valid;
