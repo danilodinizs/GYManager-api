@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.DayOfWeek;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,7 +34,7 @@ public class Workout {
     private Spreadsheet spreadsheet;
 
     @OneToMany//(mappedBy = "workout")
-    private List<Exercise> exercises;
+    private List<Exercise> exercises = new ArrayList<>();
 
 
 }

@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -29,5 +30,5 @@ public class Spreadsheet {
     private LocalDate date;
 
     @OneToMany(mappedBy = "spreadsheet")
-    private List<Workout> workouts;
+    private List<Workout> workouts = new ArrayList<>();
 }
