@@ -5,6 +5,7 @@ import dev.danilo.gymanager.dto.SpreadsheetResponseDTO;
 import dev.danilo.gymanager.entity.Spreadsheet;
 import dev.danilo.gymanager.mapper.SpreadsheetMapper;
 import dev.danilo.gymanager.repository.SpreadsheetRepository;
+import org.hibernate.annotations.NotFound;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -39,5 +40,19 @@ public class SpreadsheetService {
     public void delete(UUID id) {
         Optional<Spreadsheet> spreadsheet = repository.findById(id);
         spreadsheet.ifPresent(repository::delete);
+    }
+
+    public SpreadsheetResponseDTO updateSpreadsheet(UUID id, SpreadsheetRequestDTO dto) {
+        Optional<Spreadsheet> spreadsheet = repository.findById(id);
+
+        if(spreadsheet.isPresent()) {
+            Spreadsheet updatedSpreadsheet = spreadsheet.get();
+            updatedSpreadsheet.setName(dto.name());
+            updatedSpreadsheet.setDescription(dto.description());
+            updatedSpreadsheet.setDate(dto.date());
+            return mapper.toDto(repository.save(updatedSpreadsheet));
+        } else {
+            return null;
+        }
     }
 }
