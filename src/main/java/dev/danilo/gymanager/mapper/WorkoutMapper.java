@@ -12,13 +12,21 @@ import java.util.stream.Collectors;
 
 @Component
 public class WorkoutMapper {
+
+    private final ExerciseMapper exerciseMapper;
+
+    public WorkoutMapper(ExerciseMapper exerciseMapper) {
+        this.exerciseMapper = exerciseMapper;
+    }
+
+
     public WorkoutResponseDTO toDto(Workout entity) {
         return new WorkoutResponseDTO(entity.getId(),
                 entity.getName(),
                 entity.getDescription(),
                 entity.getDayOfWeek(),
                 entity.getSpreadsheet().getId(),
-                entity.getExercises());
+                exerciseMapper.toDtoList(entity.getExercises()));
     }
 
     public Workout toEntity(WorkoutRequestDTO dto) {
