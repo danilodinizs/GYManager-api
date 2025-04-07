@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/workout")
@@ -36,4 +37,10 @@ public class WorkoutController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<WorkoutResponseDTO> findById(@PathVariable UUID id) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
+    }
+
 }
