@@ -6,10 +6,9 @@ import dev.danilo.gymanager.mapper.WorkoutMapper;
 import dev.danilo.gymanager.service.WorkoutService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/workout")
@@ -28,5 +27,13 @@ public class WorkoutController {
     @PostMapping
     public ResponseEntity<WorkoutResponseDTO> saveWorkout(@RequestBody WorkoutRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(service.saveWorkout(dto));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<WorkoutResponseDTO>> findAll() {
+        if(service.findAll().isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
     }
 }
