@@ -15,16 +15,13 @@ public class WorkoutService {
 
     private final WorkoutRepository repository;
     private final WorkoutMapper mapper;
+    private final SpreadsheetRepository spreadsheetRepository;
 
     public WorkoutService(WorkoutRepository repository, WorkoutMapper mapper, SpreadsheetRepository spreadsheetRepository) {
         this.repository = repository;
         this.mapper = mapper;
         this.spreadsheetRepository = spreadsheetRepository;
     }
-
-    private final SpreadsheetRepository spreadsheetRepository;
-
-
 
     @Transactional
     public WorkoutResponseDTO saveWorkout(WorkoutRequestDTO dto) {
