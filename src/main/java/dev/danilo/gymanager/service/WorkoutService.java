@@ -10,6 +10,9 @@ import dev.danilo.gymanager.repository.WorkoutRepository;
 import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class WorkoutService {
 
@@ -39,5 +42,9 @@ public class WorkoutService {
         spreadsheet.getWorkouts().add(workout); // Isso é essencial!
 
         return mapper.toDto(repository.save(workout));
+    }
+
+    public List<WorkoutResponseDTO> findAll() {
+        return repository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
     }
 }
