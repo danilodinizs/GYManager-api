@@ -43,4 +43,9 @@ public class WorkoutController {
         return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
     }
 
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
+        service.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
