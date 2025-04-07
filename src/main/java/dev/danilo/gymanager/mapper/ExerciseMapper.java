@@ -2,10 +2,16 @@ package dev.danilo.gymanager.mapper;
 
 import dev.danilo.gymanager.dto.ExerciseRequestDTO;
 import dev.danilo.gymanager.dto.ExerciseResponseDTO;
+import dev.danilo.gymanager.dto.SpreadsheetResponseDTO;
+import dev.danilo.gymanager.dto.WorkoutResponseDTO;
 import dev.danilo.gymanager.entity.Exercise;
 import dev.danilo.gymanager.entity.Spreadsheet;
 import dev.danilo.gymanager.entity.Workout;
 import org.springframework.stereotype.Component;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class ExerciseMapper {
@@ -38,5 +44,15 @@ public class ExerciseMapper {
             exercise.setId(workout.getId());
         }
         return exercise;
+    }
+
+    public List<ExerciseResponseDTO> toDtoList(List<Exercise> entityList) {
+        if (entityList == null) {
+            return Collections.emptyList();
+        }
+
+        return entityList.stream()
+                .map(this::toDto)
+                .collect(Collectors.toList());
     }
 }
