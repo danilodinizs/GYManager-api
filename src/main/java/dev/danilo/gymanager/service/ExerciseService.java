@@ -32,7 +32,6 @@ public class ExerciseService {
         Workout workout = workoutRepository.findById(dto.workoutId())
                 .orElseThrow(() -> new RuntimeException("Workout não encontrado"));
 
-        // 2. Cria o novo Workout e vincula ao Spreadsheet
         Exercise exercise = new Exercise();
         exercise.setName(dto.name());
         exercise.setDescription(dto.description());
@@ -43,10 +42,9 @@ public class ExerciseService {
         exercise.setRestTime(dto.restTime());
         exercise.setTechnique(dto.technique());
         exercise.setExerciseOrder(dto.exerciseOrder());
-        exercise.setWorkout(workout); // Vinculação manual
+        exercise.setWorkout(workout);
 
-        // 3. Adiciona o Workout à lista do Spreadsheet (bidirecional)
-        workout.getExercises().add(exercise); // Isso é essencial!
+        workout.getExercises().add(exercise);
 
         return mapper.toDto(repository.save(exercise));
     }
