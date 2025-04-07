@@ -1,19 +1,53 @@
 package dev.danilo.gymanager.service;
 
+import dev.danilo.gymanager.dto.ExerciseRequestDTO;
+import dev.danilo.gymanager.dto.ExerciseResponseDTO;
+import dev.danilo.gymanager.dto.WorkoutRequestDTO;
+import dev.danilo.gymanager.dto.WorkoutResponseDTO;
+import dev.danilo.gymanager.entity.Exercise;
+import dev.danilo.gymanager.entity.Spreadsheet;
+import dev.danilo.gymanager.entity.Workout;
 import dev.danilo.gymanager.mapper.ExerciseMapper;
 import dev.danilo.gymanager.repository.ExerciseRepository;
+import dev.danilo.gymanager.repository.WorkoutRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 @Service
 public class ExerciseService {
 
     private final ExerciseRepository repository;
-
     private final ExerciseMapper mapper;
+    private final WorkoutRepository workoutRepository;
 
-
-    public ExerciseService(ExerciseRepository repository, ExerciseMapper mapper) {
+    public ExerciseService(ExerciseRepository repository, ExerciseMapper mapper, WorkoutRepository workoutRepository) {
         this.repository = repository;
         this.mapper = mapper;
+        this.workoutRepository = workoutRepository;
+    }
+
+
+    @Transactional
+        public ExerciseResponseDTO saveExercise(ExerciseRequestDTO dto) {
+        Workout workout = workoutRepository.findById(dto.workoutId())
+                .orElseThrow(() -> new RuntimeException("Workout não encontrado"));
+
+        // 2. Cria o novo Workout e vincula ao Spreadsheet
+        Exercise exercise = new Exercise();
+        exercise.setName(dto.name());
+        exercise.setDescription(dto.description());
+        exercise.setName(dto.name());
+        exercise.setDescription(dto.description());
+        exercise.setSets(dto.sets());
+        exercise.setReps(dto.reps());
+        exercise.setRestTime(dto.restTime());
+        exercise.setTechnique(dto.technique());
+        exercise.setExerciseOrder(dto.exerciseOrder());
+        exercise.setWorkout(workout); // Vinculação manual
+
+        // 3. Adiciona o Workout à lista do Spreadsheet (bidirecional)
+        workout.getExercises().add(exercise); // Isso é essencial!
+
+        return mapper.toDto(repository.save(exercise));
     }
 }
