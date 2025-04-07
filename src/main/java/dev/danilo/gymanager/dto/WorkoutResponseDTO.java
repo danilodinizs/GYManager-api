@@ -14,5 +14,5 @@ public record WorkoutResponseDTO(UUID id,
                                  String description,
                                  DayOfWeek dayOfWeek,
                                  UUID spreadsheetId,
-                                 List<Exercise> exercises) {
+                                 List<ExerciseResponseDTO> exercises) {
 }
