@@ -54,4 +54,8 @@ public class WorkoutService {
 
         return workout.map(mapper::toDto).orElse(null);
     }
+
+    public void deleteById(UUID id) {
+        repository.deleteById(id);
+    }
 }
