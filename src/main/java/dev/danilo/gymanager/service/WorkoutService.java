@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,20 +33,25 @@ public class WorkoutService {
         Spreadsheet spreadsheet = spreadsheetRepository.findById(dto.spreadsheetId())
                 .orElseThrow(() -> new RuntimeException("Spreadsheet não encontrado"));
 
-        // 2. Cria o novo Workout e vincula ao Spreadsheet
         Workout workout = new Workout();
         workout.setName(dto.name());
         workout.setDescription(dto.description());
         workout.setDayOfWeek(dto.dayOfWeek());
         workout.setSpreadsheet(spreadsheet); // Vinculação manual
 
-        // 3. Adiciona o Workout à lista do Spreadsheet (bidirecional)
-        spreadsheet.getWorkouts().add(workout); // Isso é essencial!
+        spreadsheet.getWorkouts().add(workout);
 
         return mapper.toDto(repository.save(workout));
     }
 
     public List<WorkoutResponseDTO> findAll() {
         return repository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
+    }
+
+    public WorkoutResponseDTO findById(UUID id) {
+
+        Optional<Workout> workout = repository.findById(id);
+
+        return workout.map(mapper::toDto).orElse(null);
     }
 }
