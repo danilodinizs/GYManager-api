@@ -5,7 +5,9 @@ import dev.danilo.gymanager.dto.ExerciseResponseDTO;
 import dev.danilo.gymanager.entity.Exercise;
 import dev.danilo.gymanager.entity.Spreadsheet;
 import dev.danilo.gymanager.entity.Workout;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ExerciseMapper {
 
     public ExerciseResponseDTO toDto(Exercise entity) {
