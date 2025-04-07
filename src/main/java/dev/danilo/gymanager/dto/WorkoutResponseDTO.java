@@ -13,6 +13,6 @@ public record WorkoutResponseDTO(UUID id,
                                  String name,
                                  String description,
                                  DayOfWeek dayOfWeek,
-                                 UUID spreadsheetId/*,
-                                 List<Exercise> exercises*/) {
+                                 UUID spreadsheetId,
+                                 List<Exercise> exercises) {
 }

@@ -17,8 +17,8 @@ public class WorkoutMapper {
                 entity.getName(),
                 entity.getDescription(),
                 entity.getDayOfWeek(),
-                entity.getSpreadsheet().getId())/*,
-                entity.getExercises())*/;
+                entity.getSpreadsheet().getId(),
+                entity.getExercises());
     }
 
     public Workout toEntity(WorkoutRequestDTO dto) {
