@@ -8,6 +8,7 @@ import dev.danilo.gymanager.mapper.WorkoutMapper;
 import dev.danilo.gymanager.repository.SpreadsheetRepository;
 import dev.danilo.gymanager.repository.WorkoutRepository;
 import jakarta.transaction.Transactional;
+import org.springframework.boot.web.embedded.netty.NettyWebServer;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -57,5 +58,26 @@ public class WorkoutService {
 
     public void deleteById(UUID id) {
         repository.deleteById(id);
+    }
+
+    public WorkoutResponseDTO updateWorkout(UUID id, WorkoutRequestDTO dto) {
+        Optional<Workout> workout = repository.findById(id);
+
+        if(workout.isPresent()) {
+            Workout newWorkout = workout.get();
+
+            Spreadsheet spreadsheet = new Spreadsheet();
+            spreadsheet.setId(dto.spreadsheetId());
+
+            newWorkout.setName(dto.name());
+            newWorkout.setName(dto.name());
+            newWorkout.setDescription(dto.description());
+            newWorkout.setDayOfWeek(dto.dayOfWeek());
+            newWorkout.setSpreadsheet(spreadsheet);
+
+            return mapper.toDto(repository.save(newWorkout));
+        }
+
+        return null;
     }
 }
