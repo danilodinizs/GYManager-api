@@ -14,6 +14,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 
 @Service
@@ -54,5 +56,10 @@ public class ExerciseService {
 
     public List<ExerciseResponseDTO> findAll() {
         return repository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
+    }
+
+    public ExerciseResponseDTO findById(UUID id) {
+        Optional<Exercise> exercise = repository.findById(id);
+        return exercise.map(mapper::toDto).orElse(null);
     }
 }
