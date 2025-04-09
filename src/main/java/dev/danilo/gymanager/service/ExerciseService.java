@@ -66,4 +66,29 @@ public class ExerciseService {
     public void deleteById(UUID id) {
         repository.deleteById(id);
     }
+
+    public ExerciseResponseDTO updateExercise(UUID id, ExerciseRequestDTO dto) {
+        Optional<Exercise> exercise = repository.findById(id);
+
+
+
+        if(exercise.isPresent()) {
+            Exercise newExercise = exercise.get();
+
+            Workout workout = new Workout();
+            workout.setId(dto.workoutId());
+
+            newExercise.setName(dto.name());
+            newExercise.setDescription(dto.description());
+            newExercise.setSets(dto.sets());
+            newExercise.setReps(dto.reps());
+            newExercise.setRestTime(dto.restTime());
+            newExercise.setExerciseOrder(dto.exerciseOrder());
+            newExercise.setTechnique(dto.technique());
+            newExercise.setWorkout(workout);
+
+            return mapper.toDto(repository.save(newExercise));
+        }
+        return null;
+    }
 }
