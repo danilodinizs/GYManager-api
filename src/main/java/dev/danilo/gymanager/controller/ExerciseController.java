@@ -12,16 +12,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/exercise")
+@RequestMapping("/v1/exercise")
 public class ExerciseController {
 
     private final ExerciseService service;
-    private final ExerciseMapper mapper;
 
-
-    public ExerciseController(ExerciseService service, ExerciseMapper mapper) {
+    public ExerciseController(ExerciseService service) {
         this.service = service;
-        this.mapper = mapper;
     }
 
     @PostMapping
@@ -39,21 +36,21 @@ public class ExerciseController {
         return ResponseEntity.ok().body(service.findById(id));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         service.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/delete/all")
     public ResponseEntity<Void> deleteAll() {
         service.deleteAll();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<ExerciseResponseDTO> updateExercise(@PathVariable UUID id, @RequestBody ExerciseRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.updateExercise(id, dto));
+        return ResponseEntity.ok().body(service.updateExercise(id, dto));
     }
 
 }

@@ -12,17 +12,13 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/workout")
+@RequestMapping("/v1/workout")
 public class WorkoutController {
 
     private final WorkoutService service;
 
-    private final WorkoutMapper mapper;
-
-
-    public WorkoutController(WorkoutService service, WorkoutMapper mapper) {
+    public WorkoutController(WorkoutService service) {
         this.service = service;
-        this.mapper = mapper;
     }
 
     @PostMapping
@@ -32,31 +28,28 @@ public class WorkoutController {
 
     @GetMapping
     public ResponseEntity<List<WorkoutResponseDTO>> findAll() {
-        if(service.findAll().isEmpty()) {
-            return ResponseEntity.notFound().build();
-        }
-        return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<WorkoutResponseDTO> findById(@PathVariable UUID id) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.findById(id));
+        return ResponseEntity.ok().body(service.findById(id));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
         service.deleteById(id);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @DeleteMapping("/delete/all")
     public ResponseEntity<Void> deleteAll() {
         service.deleteAll();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
     public ResponseEntity<WorkoutResponseDTO> updateWorkout(@PathVariable UUID id, @RequestBody WorkoutRequestDTO dto) {
-        return ResponseEntity.status(HttpStatus.OK).body(service.updateWorkout(id, dto));
+        return ResponseEntity.ok().body(service.updateWorkout(id, dto));
     }
 }

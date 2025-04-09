@@ -13,16 +13,18 @@ import java.util.List;
 import java.util.UUID;
 
 @RestController
-@RequestMapping("/spreadsheet")
+@RequestMapping("/v1/spreadsheet")
 public class SpreadsheetController {
 
     private final SpreadsheetService service;
 
-    private final SpreadsheetMapper mapper;
-
-    public SpreadsheetController(SpreadsheetService service, SpreadsheetMapper mapper) {
+    public SpreadsheetController(SpreadsheetService service) {
         this.service = service;
-        this.mapper = mapper;
+    }
+
+    @PostMapping
+    public ResponseEntity<SpreadsheetResponseDTO> saveSpreadsheet(@RequestBody @Valid SpreadsheetRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(service.save(dto));
     }
 
     @GetMapping
@@ -30,31 +32,24 @@ public class SpreadsheetController {
         if (service.findAll().isEmpty()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
-        return ResponseEntity.status(HttpStatus.OK).body(service.findAll());
-    }
-
-    @PostMapping
-    public ResponseEntity<Void> saveSpreadsheet(@RequestBody @Valid SpreadsheetRequestDTO dto) {
-        System.out.println("Dados recebidos: " + dto.name() + ", " + dto.description() + ", " + dto.date());
-        service.save(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+        return ResponseEntity.ok().body(service.findAll());
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<SpreadsheetResponseDTO> findSpreadsheetById(@PathVariable UUID id) {
-        return ResponseEntity.status(HttpStatus.FOUND).body(service.findById(id));
+        return ResponseEntity.ok().body(service.findById(id));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<Void> findByIdAndDelete(@PathVariable UUID id) {
         service.delete(id);
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/delete/all")
+    @DeleteMapping("/delete")
     public ResponseEntity<Void> deleteAll() {
         service.deleteAll();
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
     @PatchMapping("/{id}")
