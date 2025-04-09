@@ -38,7 +38,7 @@ public class WorkoutService {
         workout.setName(dto.name());
         workout.setDescription(dto.description());
         workout.setDayOfWeek(dto.dayOfWeek());
-        workout.setSpreadsheet(spreadsheet); // Vinculação manual
+        workout.setSpreadsheet(spreadsheet);
 
         spreadsheet.getWorkouts().add(workout);
 
@@ -46,22 +46,23 @@ public class WorkoutService {
     }
 
     public List<WorkoutResponseDTO> findAll() {
-        return repository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
+        return repository.findAll().stream().map(mapper::toDto).toList();
     }
 
     public WorkoutResponseDTO findById(UUID id) {
-
         Optional<Workout> workout = repository.findById(id);
-
-        return workout.map(mapper::toDto).orElse(null);
+        return workout.map(mapper::toDto).orElseThrow(null); // exception here
     }
 
     public void deleteById(UUID id) {
+        if(!repository.existsById(id)) {
+            // exception here: throw new Exception("Not found ")
+        }
         repository.deleteById(id);
     }
 
     public WorkoutResponseDTO updateWorkout(UUID id, WorkoutRequestDTO dto) {
-        Optional<Workout> workout = repository.findById(id);
+        Optional<Workout> workout = repository.findById(id); // exception here .orElseThrow(() -> new )
 
         if(workout.isPresent()) {
             Workout newWorkout = workout.get();

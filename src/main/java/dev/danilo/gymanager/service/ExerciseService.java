@@ -55,21 +55,23 @@ public class ExerciseService {
     }
 
     public List<ExerciseResponseDTO> findAll() {
-        return repository.findAll().stream().map(mapper::toDto).collect(Collectors.toList());
+        return repository.findAll().stream().map(mapper::toDto).toList();
     }
 
     public ExerciseResponseDTO findById(UUID id) {
         Optional<Exercise> exercise = repository.findById(id);
-        return exercise.map(mapper::toDto).orElse(null);
+        return exercise.map(mapper::toDto).orElseThrow(null); // exception here
     }
 
     public void deleteById(UUID id) {
+        if(!repository.existsById(id)) {
+            // exception here: throw new Exception("Not found ")
+        }
         repository.deleteById(id);
     }
 
     public ExerciseResponseDTO updateExercise(UUID id, ExerciseRequestDTO dto) {
-        Optional<Exercise> exercise = repository.findById(id);
-
+        Optional<Exercise> exercise = repository.findById(id) ; // exception here .orElseThrow(() -> new )
 
 
         if(exercise.isPresent()) {
