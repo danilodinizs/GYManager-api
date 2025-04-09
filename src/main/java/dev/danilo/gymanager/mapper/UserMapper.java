@@ -4,6 +4,7 @@ import dev.danilo.gymanager.dto.UserRequestDTO;
 import dev.danilo.gymanager.dto.UserResponseDTO;
 import dev.danilo.gymanager.entity.User;
 
+import dev.danilo.gymanager.enums.UserRole;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -14,6 +15,7 @@ public class UserMapper {
                 .id(entity.getId())
                 .name(entity.getName())
                 .email(entity.getEmail())
+                .role(entity.getRole().getRole())
                 .build();
     }
 
@@ -22,6 +24,7 @@ public class UserMapper {
                 .name(dto.name())
                 .email(dto.email())
                 .password(dto.password())
+                .role(UserRole.valueOf(dto.role()))
                 .build();
     }
 }

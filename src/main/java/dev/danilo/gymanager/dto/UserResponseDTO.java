@@ -7,5 +7,6 @@ import java.util.UUID;
 @Builder
 public record UserResponseDTO(UUID id,
                               String name,
-                              String email) {
+                              String email,
+                              String role) {
 }
