@@ -55,4 +55,8 @@ public class SpreadsheetService {
             return null;
         }
     }
+
+    public void deleteAll() {
+        repository.deleteAll();
+    }
 }

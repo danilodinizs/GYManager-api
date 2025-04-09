@@ -77,7 +77,10 @@ public class WorkoutService {
 
             return mapper.toDto(repository.save(newWorkout));
         }
-
         return null;
+    }
+
+    public void deleteAll() {
+        repository.deleteAll();
     }
 }

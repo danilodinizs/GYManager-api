@@ -91,4 +91,8 @@ public class ExerciseService {
         }
         return null;
     }
+
+    public void deleteAll() {
+        repository.deleteAll();
+    }
 }
