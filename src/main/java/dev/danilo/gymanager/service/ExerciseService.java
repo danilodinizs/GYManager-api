@@ -62,4 +62,8 @@ public class ExerciseService {
         Optional<Exercise> exercise = repository.findById(id);
         return exercise.map(mapper::toDto).orElse(null);
     }
+
+    public void deleteById(UUID id) {
+        repository.deleteById(id);
+    }
 }
