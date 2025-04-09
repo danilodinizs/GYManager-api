@@ -44,4 +44,9 @@ public class ExerciseController {
         service.deleteById(id);
         return ResponseEntity.ok().build();
     }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<ExerciseResponseDTO> updateExercise(@PathVariable UUID id, @RequestBody ExerciseRequestDTO dto) {
+        return ResponseEntity.status(HttpStatus.OK).body(service.updateExercise(id, dto));
+    }
 }
