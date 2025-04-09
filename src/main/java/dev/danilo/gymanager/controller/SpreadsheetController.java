@@ -51,6 +51,12 @@ public class SpreadsheetController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
+    @DeleteMapping("/delete/all")
+    public ResponseEntity<Void> deleteAll() {
+        service.deleteAll();
+        return ResponseEntity.ok().build();
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<SpreadsheetResponseDTO> updateSpreadsheet(@PathVariable UUID id, @RequestBody @Valid SpreadsheetRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.OK).body(service.updateSpreadsheet(id, dto));

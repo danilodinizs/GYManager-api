@@ -45,8 +45,15 @@ public class ExerciseController {
         return ResponseEntity.ok().build();
     }
 
+    @DeleteMapping("/delete/all")
+    public ResponseEntity<Void> deleteAll() {
+        service.deleteAll();
+        return ResponseEntity.ok().build();
+    }
+
     @PatchMapping("/{id}")
     public ResponseEntity<ExerciseResponseDTO> updateExercise(@PathVariable UUID id, @RequestBody ExerciseRequestDTO dto) {
         return ResponseEntity.status(HttpStatus.OK).body(service.updateExercise(id, dto));
     }
+
 }
