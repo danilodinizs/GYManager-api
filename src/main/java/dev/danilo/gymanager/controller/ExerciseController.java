@@ -38,4 +38,10 @@ public class ExerciseController {
     public ResponseEntity<ExerciseResponseDTO> findById(@PathVariable UUID id) {
         return ResponseEntity.ok().body(service.findById(id));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Void> deleteById(@PathVariable UUID id) {
+        service.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }
