@@ -1,11 +1,13 @@
 package dev.danilo.gymanager.controller;
 
+import dev.danilo.gymanager.dto.LoginResponseDTO;
 import dev.danilo.gymanager.dto.UserRequestDTO;
 import dev.danilo.gymanager.dto.UserResponseDTO;
 import dev.danilo.gymanager.entity.User;
 import dev.danilo.gymanager.mapper.UserMapper;
 import dev.danilo.gymanager.repository.UserRepository;
 import dev.danilo.gymanager.service.AuthorizationService;
+import dev.danilo.gymanager.service.TokenService;
 import dev.danilo.gymanager.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
@@ -24,12 +26,13 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final AuthorizationService authService;
     private final UserService userService;
+    private final TokenService tokenService;
 
-    public AuthController(AuthenticationManager authenticationManager, AuthorizationService authService, UserService userService) {
+    public AuthController(AuthenticationManager authenticationManager, AuthorizationService authService, UserService userService, TokenService tokenService) {
         this.authenticationManager = authenticationManager;
         this.authService = authService;
         this.userService = userService;
-
+        this.tokenService = tokenService;
     }
 
 
@@ -48,7 +51,8 @@ public class AuthController {
         var usernamePassword = new UsernamePasswordAuthenticationToken(dto.email(), dto.password());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.generateToken((User )auth.getPrincipal());
+        return ResponseEntity.ok(new LoginResponseDTO(token));
     }
 
     @DeleteMapping("/delete/{email}")
