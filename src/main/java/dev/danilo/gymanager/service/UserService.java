@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -35,6 +36,10 @@ public class UserService {
                 byEmail.getPassword());
 
         repository.delete(user);
+    }
+
+    public List<UserResponseDTO> findAll() {
+        return repository.findAll().stream().map(mapper::toDto).toList();
     }
 
 }
