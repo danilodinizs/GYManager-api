@@ -6,6 +6,7 @@ import dev.danilo.gymanager.entity.User;
 import dev.danilo.gymanager.mapper.UserMapper;
 import dev.danilo.gymanager.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
