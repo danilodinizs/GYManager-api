@@ -9,6 +9,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class UserService {
 
@@ -23,6 +26,12 @@ public class UserService {
 
     public UserResponseDTO save(UserRequestDTO dto) {
         return mapper.toDto(repository.save(mapper.toEntity(dto)));
+    }
+    
+    public void delete(UUID id) {
+        Optional<User> byId = repository.findById(id);
+
+        byId.ifPresent(repository::delete);
     }
 
 }
