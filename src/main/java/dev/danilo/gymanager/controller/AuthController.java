@@ -50,9 +50,12 @@ public class AuthController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity delete(@PathVariable UUID id) {
-        userService.delete(id);
+    @DeleteMapping("/{email}")
+    public ResponseEntity delete(@PathVariable String email) {
+        userService.delete(email);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping
+    public ResponseEntity<List<UserResponseDTO>>
 }

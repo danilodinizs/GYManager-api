@@ -28,10 +28,13 @@ public class UserService {
         return mapper.toDto(repository.save(mapper.toEntity(dto)));
     }
     
-    public void delete(UUID id) {
-        Optional<User> byId = repository.findById(id);
+    public void delete(String email) {
+        UserDetails byEmail = repository.findByEmail(email);
 
-        byId.ifPresent(repository::delete);
+        User user = new User(byEmail.getUsername(),
+                byEmail.getPassword());
+
+        repository.delete(user);
     }
 
 }
