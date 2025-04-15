@@ -5,8 +5,7 @@ import lombok.Builder;
 import java.util.UUID;
 
 @Builder
-public record UserResponseDTO(UUID id,
-                              String name,
+public record UserResponseDTO(String name,
                               String email,
                               String role) {
 }
