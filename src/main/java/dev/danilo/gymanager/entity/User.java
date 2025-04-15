@@ -36,6 +36,8 @@ public class User implements UserDetails {
 
     public User(String name, String email, String encryptedPassword, String role) {
     }
+    public User(String email, String encryptedPassword) {
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
