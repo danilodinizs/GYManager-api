@@ -17,3 +17,9 @@ spring:
 
   flyway:
     enabled: true
+
+
+api:
+  security:
+    token:
+      secret: ${JWT_SECRET:my-secret-key}
