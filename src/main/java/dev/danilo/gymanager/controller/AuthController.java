@@ -2,11 +2,16 @@ package dev.danilo.gymanager.controller;
 
 import dev.danilo.gymanager.dto.UserRequestDTO;
 import dev.danilo.gymanager.dto.UserResponseDTO;
+import dev.danilo.gymanager.entity.User;
+import dev.danilo.gymanager.mapper.UserMapper;
+import dev.danilo.gymanager.repository.UserRepository;
+import dev.danilo.gymanager.service.AuthorizationService;
 import dev.danilo.gymanager.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,16 +22,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class AuthController {
 
     private final AuthenticationManager authenticationManager;
-    private final UserService service;
+    private final AuthorizationService authService;
+    private final UserService userService;
 
-    public AuthController(AuthenticationManager authenticationManager, UserService service) {
+    public AuthController(AuthenticationManager authenticationManager, AuthorizationService authService, UserService userService) {
         this.authenticationManager = authenticationManager;
-        this.service = service;
+        this.authService = authService;
+        this.userService = userService;
+
     }
 
+
     @PostMapping("/register")
-    public ResponseEntity<UserResponseDTO> register(@RequestBody UserRequestDTO dto) {
-        return ResponseEntity.ok(service.save(dto));
+    public ResponseEntity register(@RequestBody @Valid UserRequestDTO dto) {
+        if (authService.loadUserByUsername(dto.email()) != null) return ResponseEntity.badRequest().build();
+        String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
+        UserRequestDTO newUser = new UserRequestDTO(dto.name(), dto.email(), encryptedPassword, dto.role());
+        userService.save(newUser);
+
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping("/login")
