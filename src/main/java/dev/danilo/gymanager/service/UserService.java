@@ -32,10 +32,7 @@ public class UserService {
     public void delete(String email) {
         UserDetails byEmail = repository.findByEmail(email);
 
-        User user = new User(byEmail.getUsername(),
-                byEmail.getPassword());
-
-        repository.delete(user);
+        repository.delete((User) byEmail);
     }
 
     public List<UserResponseDTO> findAll() {
