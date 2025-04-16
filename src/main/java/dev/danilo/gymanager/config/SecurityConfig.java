@@ -34,6 +34,14 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .requestMatchers(HttpMethod.POST, "/auth/register").permitAll()
+                        .requestMatchers(
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-resources/**",
+                                "/swagger-ui.html",
+                                "/webjars/**",
+                                "/favicon.ico"
+                        ).permitAll()
                         .requestMatchers(HttpMethod.DELETE, "/auth/delete/{email}").hasRole("ADMIN")
                         .requestMatchers(HttpMethod.GET, "/auth").hasRole("ADMIN")
                         // .requestMatchers(HttpMethod.GET, "/v1/spreadsheet").hasRole("ADMIN")
