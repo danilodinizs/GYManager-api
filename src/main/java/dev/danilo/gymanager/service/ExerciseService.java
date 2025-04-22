@@ -8,7 +8,9 @@ import dev.danilo.gymanager.entity.Workout;
 import dev.danilo.gymanager.mapper.ExerciseMapper;
 import dev.danilo.gymanager.repository.ExerciseRepository;
 import dev.danilo.gymanager.repository.WorkoutRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -38,13 +40,11 @@ public class ExerciseService {
         log.info("Starting the process of saving an Exercise");
 
         Workout workout = workoutRepository.findById(dto.workoutId())
-                .orElseThrow(() -> new RuntimeException("Workout não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Workout not found"));
 
-        log.info("Workout to save this exercise found with id: " + dto.workoutId());
+        log.info("Workout to save this exercise found with id: {}", dto.workoutId());
 
         Exercise exercise = new Exercise();
-        exercise.setName(dto.name());
-        exercise.setDescription(dto.description());
         exercise.setName(dto.name());
         exercise.setDescription(dto.description());
         exercise.setSets(dto.sets());
@@ -56,7 +56,7 @@ public class ExerciseService {
 
         workout.getExercises().add(exercise);
 
-        log.info("Exercise saved and added to workout: " + exercise.toString());
+        log.info("Exercise saved and added to workout: {}", exercise.toString());
 
         return mapper.toDto(repository.save(exercise));
     }
@@ -67,48 +67,47 @@ public class ExerciseService {
     }
 
     public ExerciseResponseDTO findById(UUID id) {
-        Optional<Exercise> exercise = repository.findById(id);
-        log.info("Exercise found by id: " + id + " or returning null");
-        return exercise.map(mapper::toDto).orElseThrow(null); // exception here
+        log.info("Searching exercise by id: {}", id);
+        return repository.findById(id)
+                .map(mapper::toDto)
+                .orElseThrow(() -> new EntityNotFoundException("Exercise not found with ID: " + id));
     }
 
     public void deleteById(UUID id) {
         if(!repository.existsById(id)) {
-            // exception here: throw new Exception("Not found ")
+            throw new EntityNotFoundException("Exercise not found with ID: " + id);
         }
-        log.info("Deleting exercise by id: " + id);
+        log.info("Deleting exercise by id: {}", id);
         repository.deleteById(id);
     }
 
-    public ExerciseResponseDTO updateExercise(UUID id, ExerciseRequestDTO dto) {
+    public ExerciseResponseDTO updateExercise(UUID id, @Valid ExerciseRequestDTO dto) {
 
         log.info("Starting the process of updating an Exercise");
 
-        Optional<Exercise> exercise = repository.findById(id) ; // exception here .orElseThrow(() -> new )
+        Exercise exercise = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Exercise not found with ID: " + id));
 
-        log.info("Exercise found by id: " + id);
+        log.info("Exercise found by id: {}", id);
 
-        if(exercise.isPresent()) {
-            Exercise newExercise = exercise.get();
 
-            Workout workout = new Workout();
-            workout.setId(dto.workoutId());
+        Workout workout = workoutRepository.findById(dto.workoutId())
+                .orElseThrow(() -> new EntityNotFoundException("Workout not found with ID: " + dto.workoutId()));
 
-            newExercise.setName(dto.name());
-            newExercise.setDescription(dto.description());
-            newExercise.setSets(dto.sets());
-            newExercise.setReps(dto.reps());
-            newExercise.setRestTime(dto.restTime());
-            newExercise.setExerciseOrder(dto.exerciseOrder());
-            newExercise.setTechnique(dto.technique());
-            newExercise.setWorkout(workout);
+        exercise.setName(dto.name());
+        exercise.setDescription(dto.description());
+        exercise.setSets(dto.sets());
+        exercise.setReps(dto.reps());
+        exercise.setRestTime(dto.restTime());
+        exercise.setExerciseOrder(dto.exerciseOrder());
+        exercise.setTechnique(dto.technique());
+        exercise.setWorkout(workout);
 
-            log.info("Saving new exercise: " + newExercise.toString());
+        log.info("Saving new exercise: {}", exercise.toString());
 
-            return mapper.toDto(repository.save(newExercise));
-        }
-        return null;
+        return mapper.toDto(repository.save(exercise));
+
     }
+
 
     public void deleteAll() {
 
