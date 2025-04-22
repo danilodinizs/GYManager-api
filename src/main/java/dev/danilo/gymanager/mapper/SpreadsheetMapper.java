@@ -5,7 +5,6 @@ import dev.danilo.gymanager.dto.SpreadsheetResponseDTO;
 import dev.danilo.gymanager.entity.Spreadsheet;
 import org.springframework.stereotype.Component;
 
-import javax.swing.plaf.SplitPaneUI;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

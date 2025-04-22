@@ -2,7 +2,6 @@ package dev.danilo.gymanager.controller;
 
 import dev.danilo.gymanager.dto.ExerciseRequestDTO;
 import dev.danilo.gymanager.dto.ExerciseResponseDTO;
-import dev.danilo.gymanager.mapper.ExerciseMapper;
 import dev.danilo.gymanager.service.ExerciseService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;

@@ -4,8 +4,6 @@ import dev.danilo.gymanager.dto.LoginResponseDTO;
 import dev.danilo.gymanager.dto.UserRequestDTO;
 import dev.danilo.gymanager.dto.UserResponseDTO;
 import dev.danilo.gymanager.entity.User;
-import dev.danilo.gymanager.mapper.UserMapper;
-import dev.danilo.gymanager.repository.UserRepository;
 import dev.danilo.gymanager.service.AuthorizationService;
 import dev.danilo.gymanager.service.TokenService;
 import dev.danilo.gymanager.service.UserService;
@@ -22,7 +20,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/auth")

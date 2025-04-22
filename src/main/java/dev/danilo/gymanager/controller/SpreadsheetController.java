@@ -2,7 +2,6 @@ package dev.danilo.gymanager.controller;
 
 import dev.danilo.gymanager.dto.SpreadsheetRequestDTO;
 import dev.danilo.gymanager.dto.SpreadsheetResponseDTO;
-import dev.danilo.gymanager.mapper.SpreadsheetMapper;
 import dev.danilo.gymanager.service.SpreadsheetService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
