@@ -2,23 +2,23 @@ package dev.danilo.gymanager.service;
 
 import dev.danilo.gymanager.dto.ExerciseRequestDTO;
 import dev.danilo.gymanager.dto.ExerciseResponseDTO;
-import dev.danilo.gymanager.dto.WorkoutRequestDTO;
-import dev.danilo.gymanager.dto.WorkoutResponseDTO;
+
 import dev.danilo.gymanager.entity.Exercise;
-import dev.danilo.gymanager.entity.Spreadsheet;
 import dev.danilo.gymanager.entity.Workout;
 import dev.danilo.gymanager.mapper.ExerciseMapper;
 import dev.danilo.gymanager.repository.ExerciseRepository;
 import dev.danilo.gymanager.repository.WorkoutRepository;
 import jakarta.transaction.Transactional;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import java.util.stream.Collectors;
+
 
 @Service
+@Slf4j
 public class ExerciseService {
 
     private final ExerciseRepository repository;
@@ -34,8 +34,13 @@ public class ExerciseService {
 
     @Transactional
         public ExerciseResponseDTO saveExercise(ExerciseRequestDTO dto) {
+
+        log.info("Starting the process of saving an Exercise");
+
         Workout workout = workoutRepository.findById(dto.workoutId())
                 .orElseThrow(() -> new RuntimeException("Workout não encontrado"));
+
+        log.info("Workout to save this exercise found with id: " + dto.workoutId());
 
         Exercise exercise = new Exercise();
         exercise.setName(dto.name());
@@ -51,15 +56,19 @@ public class ExerciseService {
 
         workout.getExercises().add(exercise);
 
+        log.info("Exercise saved and added to workout: " + exercise.toString());
+
         return mapper.toDto(repository.save(exercise));
     }
 
     public List<ExerciseResponseDTO> findAll() {
+        log.info("Looking for all exercises");
         return repository.findAll().stream().map(mapper::toDto).toList();
     }
 
     public ExerciseResponseDTO findById(UUID id) {
         Optional<Exercise> exercise = repository.findById(id);
+        log.info("Exercise found by id: " + id + " or returning null");
         return exercise.map(mapper::toDto).orElseThrow(null); // exception here
     }
 
@@ -67,12 +76,17 @@ public class ExerciseService {
         if(!repository.existsById(id)) {
             // exception here: throw new Exception("Not found ")
         }
+        log.info("Deleting exercise by id: " + id);
         repository.deleteById(id);
     }
 
     public ExerciseResponseDTO updateExercise(UUID id, ExerciseRequestDTO dto) {
+
+        log.info("Starting the process of updating an Exercise");
+
         Optional<Exercise> exercise = repository.findById(id) ; // exception here .orElseThrow(() -> new )
 
+        log.info("Exercise found by id: " + id);
 
         if(exercise.isPresent()) {
             Exercise newExercise = exercise.get();
@@ -89,12 +103,17 @@ public class ExerciseService {
             newExercise.setTechnique(dto.technique());
             newExercise.setWorkout(workout);
 
+            log.info("Saving new exercise: " + newExercise.toString());
+
             return mapper.toDto(repository.save(newExercise));
         }
         return null;
     }
 
     public void deleteAll() {
+
+        log.info("Deleting all exercises");
+
         repository.deleteAll();
     }
 }

@@ -5,15 +5,14 @@ import dev.danilo.gymanager.dto.UserResponseDTO;
 import dev.danilo.gymanager.entity.User;
 import dev.danilo.gymanager.mapper.UserMapper;
 import dev.danilo.gymanager.repository.UserRepository;
-import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
+@Slf4j
 public class UserService {
 
     private final UserRepository repository;
@@ -26,16 +25,22 @@ public class UserService {
 
 
     public UserResponseDTO save(UserRequestDTO dto) {
+        log.info("Saving an User");
         return mapper.toDto(repository.save(mapper.toEntity(dto)));
     }
     
     public void delete(String email) {
+        log.info("Stating the process of deleting an user by email: " + email);
         UserDetails byEmail = repository.findByEmail(email);
+
+        log.info("User deleted: " + (User) byEmail);
 
         repository.delete((User) byEmail);
     }
 
     public List<UserResponseDTO> findAll() {
+
+        log.info("Looking for all users");
         return repository.findAll().stream().map(mapper::toDto).toList();
     }
 
