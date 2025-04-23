@@ -47,7 +47,6 @@ public class AuthController {
             @ApiResponse(responseCode = "500", description = "Internal server error!")
     })
     public ResponseEntity register(@RequestBody @Valid UserRequestDTO dto) {
-        if (authService.loadUserByUsername(dto.email()) != null) return ResponseEntity.badRequest().build();
         String encryptedPassword = new BCryptPasswordEncoder().encode(dto.password());
         UserRequestDTO newUser = new UserRequestDTO(dto.name(), dto.email(), encryptedPassword, dto.role());
         userService.save(newUser);
