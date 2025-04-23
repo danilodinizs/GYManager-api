@@ -24,7 +24,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
-            log.info("token generated and delivered to the user: " + user);
+            log.info("token generated and delivered to the user: {}", user);
 
             return JWT.create()
                     .withIssuer("gymanager-api")
@@ -32,7 +32,7 @@ public class TokenService {
                     .withExpiresAt(genExpirationDate())
                     .sign(algorithm);
         } catch (JWTCreationException e){
-            throw new RuntimeException("Error while generating token", e);
+            throw new RuntimeException("Error while generating token: ", e);
         }
     }
 
@@ -40,7 +40,7 @@ public class TokenService {
         try {
             Algorithm algorithm = Algorithm.HMAC256(secret);
 
-            log.info("Token validated and user email returned: " + validateToken(token));
+            log.info("Token validated and user email returned: {}", validateToken(token));
 
             return JWT.require(algorithm)
                     .withIssuer("gymanager-api")
@@ -48,7 +48,7 @@ public class TokenService {
                     .verify(token)
                     .getSubject();
         } catch (JWTVerificationException e) {
-            return "";
+            throw new RuntimeException("Error while validating token: ", e);
         }
     }
 

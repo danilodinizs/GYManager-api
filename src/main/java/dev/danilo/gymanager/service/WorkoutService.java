@@ -7,6 +7,7 @@ import dev.danilo.gymanager.entity.Workout;
 import dev.danilo.gymanager.mapper.WorkoutMapper;
 import dev.danilo.gymanager.repository.SpreadsheetRepository;
 import dev.danilo.gymanager.repository.WorkoutRepository;
+import jakarta.persistence.EntityNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -32,11 +33,11 @@ public class WorkoutService {
     @Transactional
     public WorkoutResponseDTO saveWorkout(WorkoutRequestDTO dto) {
         log.info("Starting the process of saving a Workout");
+
         Spreadsheet spreadsheet = spreadsheetRepository.findById(dto.spreadsheetId())
-                .orElseThrow(() -> new RuntimeException("Spreadsheet não encontrado"));
+                .orElseThrow(() -> new EntityNotFoundException("Spreadsheet not found by id: " + dto.spreadsheetId()));
 
-
-        log.info("Spreadsheet to save this workout found with id: " + dto.spreadsheetId());
+        log.info("Spreadsheet to save this workout found with id: {}", dto.spreadsheetId());
 
         Workout workout = new Workout();
         workout.setName(dto.name());
@@ -46,7 +47,7 @@ public class WorkoutService {
 
         spreadsheet.getWorkouts().add(workout);
 
-        log.info("Workout saved and added to spreadsheet: " + workout.toString());
+        log.info("Workout saved and added to spreadsheet: {}", workout.toString());
 
         return mapper.toDto(repository.save(workout));
     }
@@ -58,17 +59,16 @@ public class WorkoutService {
     }
 
     public WorkoutResponseDTO findById(UUID id) {
-        Optional<Workout> workout = repository.findById(id);
-        log.info("Workout found by id: " + id + " or returning null");
-        return workout.map(mapper::toDto).orElseThrow(null); // exception here
+        log.info("Searching workout by id: {}", id);
+        return repository.findById(id).map(mapper::toDto).orElseThrow(() -> new EntityNotFoundException("Workout not found by id: " + id)); // exception here
     }
 
     public void deleteById(UUID id) {
         if(!repository.existsById(id)) {
-            // exception here: throw new Exception("Not found ")
+            throw new EntityNotFoundException("Workout not found by id: " + id);
         }
 
-        log.info("Deleting workout by id: " + id);
+        log.info("Deleting workout by id: {}", id);
         repository.deleteById(id);
     }
 
@@ -76,28 +76,24 @@ public class WorkoutService {
 
         log.info("Starting the process of updating a Workout");
 
-        Optional<Workout> workout = repository.findById(id); // exception here .orElseThrow(() -> new )
+        Workout workout = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Workout not found by id: " + id));
 
-        log.info("Workout found by id: " + id);
+        log.info("Workout found by id: {}", id);
 
-        if(workout.isPresent()) {
-            Workout newWorkout = workout.get();
+        Spreadsheet spreadsheet = spreadsheetRepository.findById(dto.spreadsheetId()).orElseThrow(() -> new EntityNotFoundException("Spreadsheet not found by id: " + dto.spreadsheetId()));
 
-            Spreadsheet spreadsheet = new Spreadsheet();
-            spreadsheet.setId(dto.spreadsheetId());
+        workout.setName(dto.name());
+        workout.setName(dto.name());
+        workout.setDescription(dto.description());
+        workout.setDayOfWeek(dto.dayOfWeek());
+        workout.setSpreadsheet(spreadsheet);
 
-            newWorkout.setName(dto.name());
-            newWorkout.setName(dto.name());
-            newWorkout.setDescription(dto.description());
-            newWorkout.setDayOfWeek(dto.dayOfWeek());
-            newWorkout.setSpreadsheet(spreadsheet);
+        log.info("Saving new workout: {}", workout.toString());
 
-            log.info("Saving new workout: " + workout.toString());
+        return mapper.toDto(repository.save(workout));
 
-            return mapper.toDto(repository.save(newWorkout));
-        }
-        return null;
     }
+
 
     public void deleteAll() {
 

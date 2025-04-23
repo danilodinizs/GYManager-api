@@ -5,6 +5,7 @@ import dev.danilo.gymanager.dto.SpreadsheetResponseDTO;
 import dev.danilo.gymanager.entity.Spreadsheet;
 import dev.danilo.gymanager.mapper.SpreadsheetMapper;
 import dev.danilo.gymanager.repository.SpreadsheetRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.extern.slf4j.Slf4j;
 
 import org.springframework.stereotype.Service;
@@ -32,22 +33,20 @@ public class SpreadsheetService {
     }
 
     public SpreadsheetResponseDTO save(SpreadsheetRequestDTO dto) {
-        log.info("Saving a Spreadsheet");
+        log.info("Saving a Spreadsheet: {}", dto.toString());
         return mapper.toDto(repository.save(mapper.toEntity(dto)));
     }
 
     public SpreadsheetResponseDTO findById(UUID id) {
-        Optional<Spreadsheet> spreadsheet = repository.findById(id);
-
-        log.info("Spreadsheet found by id: " + id + " or returning null");
-        return spreadsheet.map(mapper::toDto).orElseThrow(null); //exception here
+        log.info("Searching spreadsheet by id: {}", id);
+        return repository.findById(id).map(mapper::toDto).orElseThrow(() -> new EntityNotFoundException("Spreadsheet not found by id: " + id));
     }
 
     public void delete(UUID id) {
         if(!repository.existsById(id)) {
-            // exception here: throw new Exception("Not found ")
+            throw new EntityNotFoundException("Spreadsheet not found by id: " + id);
         }
-        log.info("Deleting spreadsheet by id: " + id);
+        log.info("Deleting spreadsheet by id: {}", id);
         repository.deleteById(id);
     }
 
@@ -55,22 +54,17 @@ public class SpreadsheetService {
 
         log.info("Starting the process of updating a Spreadsheet");
 
-        Optional<Spreadsheet> spreadsheet = repository.findById(id); // exception here .orElseThrow(() -> new )
+        Spreadsheet spreadsheet = repository.findById(id).orElseThrow(() -> new EntityNotFoundException("Spreadsheet not found by id: " + id));
 
-        log.info("Spreadsheet found by id: " + id);
+        log.info("Spreadsheet found by id: {}", id);
 
-        if(spreadsheet.isPresent()) {
-            Spreadsheet newSpreadsheet = spreadsheet.get();
+        spreadsheet.setName(dto.name());
+        spreadsheet.setDescription(dto.description());
+        spreadsheet.setDate(dto.date());
 
-            newSpreadsheet.setName(dto.name());
-            newSpreadsheet.setDescription(dto.description());
-            newSpreadsheet.setDate(dto.date());
+        log.info("Saving new spreadsheet: {}", spreadsheet.toString());
 
-            log.info("Saving new spreadsheet: " + newSpreadsheet.toString());
-
-            return mapper.toDto(repository.save(newSpreadsheet));
-        }
-        return null;
+        return mapper.toDto(repository.save(spreadsheet));
     }
 
     public void deleteAll() {
