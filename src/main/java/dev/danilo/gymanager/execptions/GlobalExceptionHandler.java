@@ -43,7 +43,7 @@ public class GlobalExceptionHandler {
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> handleAllExceptions(Exception e) {
-        log.error("Internal error: ", ex); //
+        log.error("Internal error: ", e); //
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Internal server error - Contact support: " + e.getMessage());
     }
 }
